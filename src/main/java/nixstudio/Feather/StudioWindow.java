@@ -4,9 +4,9 @@ import imgui.app.Application;
 
 public abstract class StudioWindow{
 	
-	public Main application;
+	public GuiMain application;
 	
-	public StudioWindow(Main main) {
+	public StudioWindow(GuiMain main) {
 		this.application = main;
 	}
 	

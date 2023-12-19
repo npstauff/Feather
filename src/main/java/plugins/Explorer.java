@@ -11,13 +11,13 @@ import javax.swing.UnsupportedLookAndFeelException;
 import imgui.ImGui;
 import imgui.type.ImBoolean;
 import nixstudio.Feather.Gui;
-import nixstudio.Feather.Main;
+import nixstudio.Feather.GuiMain;
 import nixstudio.Feather.Pair;
 import nixstudio.Feather.StudioWindow;
 
 public class Explorer extends StudioWindow{
 	
-	public Explorer(Main main) {
+	public Explorer(GuiMain main) {
 		super(main);
 		// TODO Auto-generated constructor stub
 	}

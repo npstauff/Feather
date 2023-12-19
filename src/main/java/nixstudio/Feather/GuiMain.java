@@ -19,22 +19,26 @@ import imgui.type.*;
 import plugins.Editor;
 import plugins.Explorer;
 
-public class Main extends Application{
+public class GuiMain extends Application{
 	
 	public static final String PLUGIN_PATH = "src/main/java/plugins";
 	public static final File basePluginFolder() {
 		return new File(PLUGIN_PATH);
 	}
 	
+	public static void main(String[] args) {
+		launch(new GuiMain());
+	}
+	
 	Configuration config = null;
 	
 	ArrayList<Class<? extends StudioWindow>> windowTypes = new ArrayList<>();
 	
-	ArrayList<StudioWindow> windows = new ArrayList<>();
+	ArrayList<Pair<Boolean, StudioWindow>> windows = new ArrayList<>();
 	
 	@Override
 	protected void configure(Configuration config) {
-		config.setTitle("Nix Studio");
+		config.setTitle("Feather");
 		this.config = config;
 	}
 	
@@ -71,16 +75,16 @@ public class Main extends Application{
 	}
 	
 	public <T extends StudioWindow> void openWindow(Class<T> klass) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Constructor<T> ctor = klass.getConstructor(Main.class);
+		Constructor<T> ctor = klass.getConstructor(GuiMain.class);
 		T object = ctor.newInstance(new Object[] {this});
-		windows.add(object);
+		windows.add(new Pair<Boolean, StudioWindow>(true, object));
 	}
 	
 	@SuppressWarnings("unchecked")
 	public <T extends StudioWindow> T getWindow(Class<T> klass) {
-		for(StudioWindow window : windows) {
+		for(Pair<Boolean, StudioWindow> window : windows) {
 			if(klass.isInstance(window)) {
-				return (T)window;
+				return (T)window.second;
 			}
 		}
 		return null;
@@ -91,9 +95,14 @@ public class Main extends Application{
 		// TODO Auto-generated method stub
 		setUpDockspace();
 		
-		for(StudioWindow window : windows) {
-			ImGui.begin(window.getTitle());
-			window.guiUpdate();
+		for(int i = windows.size() - 1; i >= 0; i--) {
+			Pair<Boolean, StudioWindow> window = windows.get(i);
+			ImGui.begin(window.second.getTitle());
+			ImGui.sameLine();
+			if(ImGui.button("X")) {
+				windows.remove(i);
+			}
+			window.second.guiUpdate();
 			ImGui.end();
 		}
 		
@@ -109,7 +118,7 @@ public class Main extends Application{
 		
 		
 		
-		ImGui.begin("Docking test", new ImBoolean(true), windowFlags);
+		ImGui.begin("Feather", new ImBoolean(true), windowFlags);
 		
 		if(ImGui.beginMenuBar()) {
 			if(ImGui.beginMenu("File")) {
@@ -158,9 +167,5 @@ public class Main extends Application{
 	
 	public void error(String message, Exception e) {
 		System.out.println(message + "\nReason: " + e.getMessage());
-	}
-	
-	public static void main(String[] args) {
-		launch(new Main());
 	}
 }

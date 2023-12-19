@@ -14,14 +14,14 @@ import imgui.extension.texteditor.*;
 import imgui.type.ImBoolean;
 import imgui.type.ImString;
 import nixstudio.Feather.Gui;
-import nixstudio.Feather.Main;
+import nixstudio.Feather.GuiMain;
 import nixstudio.Feather.StudioWindow;
 
 import org.apache.commons.io.*;
 
 public class Editor extends StudioWindow{
 
-	public Editor(Main main) {
+	public Editor(GuiMain main) {
 		super(main);
 		// TODO Auto-generated constructor stub
 	}
