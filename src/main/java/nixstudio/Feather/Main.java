@@ -22,7 +22,7 @@ import plugins.Explorer;
 public class Main extends Application{
 	
 	public static final String PLUGIN_PATH = "src/main/java/plugins";
-	public static final File pluginFolder() {
+	public static final File basePluginFolder() {
 		return new File(PLUGIN_PATH);
 	}
 	
