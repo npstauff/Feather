@@ -1,5 +1,6 @@
-package nixstudio.Feather;
+package nixstudio.Feather.Core;
 import java.awt.Desktop;
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -46,6 +47,33 @@ public class GuiMain extends Application{
 	protected void preRun() {
 		ImGui.getIO().setConfigFlags(ImGuiConfigFlags.DockingEnable);
 		loadPlugins();
+		loadDefaultLayout();
+	}
+	
+	public void loadDefaultLayout() {
+		try {
+			openWindow(Editor.class);
+			openWindow(Explorer.class);
+			openWindow(plugins.Console.class);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void loadPlugins() {
@@ -75,15 +103,20 @@ public class GuiMain extends Application{
 	}
 	
 	public <T extends StudioWindow> void openWindow(Class<T> klass) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Constructor<T> ctor = klass.getConstructor(GuiMain.class);
-		T object = ctor.newInstance(new Object[] {this});
-		windows.add(new Pair<Boolean, StudioWindow>(true, object));
+		if(getWindow(klass) == null) {
+			Constructor<T> ctor = klass.getConstructor(GuiMain.class);
+			T object = ctor.newInstance(new Object[] {this});
+			windows.add(new Pair<Boolean, StudioWindow>(true, object));
+		}
+		else {
+			System.out.println("Already opened window '" + klass.getName() + "'!");
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
 	public <T extends StudioWindow> T getWindow(Class<T> klass) {
 		for(Pair<Boolean, StudioWindow> window : windows) {
-			if(klass.isInstance(window)) {
+			if(klass.isInstance(window.second)) {
 				return (T)window.second;
 			}
 		}
@@ -94,12 +127,10 @@ public class GuiMain extends Application{
 	public void process() {
 		// TODO Auto-generated method stub
 		setUpDockspace();
-		
 		for(int i = windows.size() - 1; i >= 0; i--) {
 			Pair<Boolean, StudioWindow> window = windows.get(i);
 			ImGui.begin(window.second.getTitle());
-			ImGui.sameLine();
-			if(ImGui.button("X")) {
+			if(ImGui.button("Close Window")) {
 				windows.remove(i);
 			}
 			window.second.guiUpdate();

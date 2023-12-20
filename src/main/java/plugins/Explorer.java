@@ -10,10 +10,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import imgui.ImGui;
 import imgui.type.ImBoolean;
-import nixstudio.Feather.Gui;
-import nixstudio.Feather.GuiMain;
-import nixstudio.Feather.Pair;
-import nixstudio.Feather.StudioWindow;
+import nixstudio.Feather.Core.Gui;
+import nixstudio.Feather.Core.GuiMain;
+import nixstudio.Feather.Core.Pair;
+import nixstudio.Feather.Core.StudioWindow;
 
 public class Explorer extends StudioWindow{
 	

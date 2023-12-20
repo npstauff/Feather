@@ -1,4 +1,4 @@
-package nixstudio.Feather;
+package nixstudio.Feather.Core;
 
 import imgui.ImGui;
 

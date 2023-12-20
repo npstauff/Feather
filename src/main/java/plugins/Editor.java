@@ -13,9 +13,9 @@ import imgui.ImGui;
 import imgui.extension.texteditor.*;
 import imgui.type.ImBoolean;
 import imgui.type.ImString;
-import nixstudio.Feather.Gui;
-import nixstudio.Feather.GuiMain;
-import nixstudio.Feather.StudioWindow;
+import nixstudio.Feather.Core.Gui;
+import nixstudio.Feather.Core.GuiMain;
+import nixstudio.Feather.Core.StudioWindow;
 
 import org.apache.commons.io.*;
 
@@ -83,8 +83,26 @@ public class Editor extends StudioWindow{
 			
 		}
 		else {
-			Gui.text("No files selected");
+			noFiles("No Files Selected");
 		}
+	}
+	
+	void noFiles(String text) {
+	    float windowWidth = ImGui.getWindowSize().x;
+	    float textWidth = ImGui.calcTextSize(text).x;
+	    
+	    float windowHeight = ImGui.getWindowSize().y;
+	    float textHeight = ImGui.calcTextSize(text).y;
+
+	    ImGui.setCursorPosX((windowWidth - textWidth) * 0.5f);
+	    ImGui.setCursorPosY((windowHeight - textHeight) * 0.5f - 20);
+	    ImGui.text(text);
+	    ImGui.setCursorPosX((windowWidth - ImGui.calcTextSize("Open Folder").x) * 0.5f);
+	    if(ImGui.button("Open Folder")) {
+	    	if(application.getWindow(Explorer.class) != null) {
+	    		application.getWindow(Explorer.class).openFolder();
+	    	}
+	    }
 	}
 	
 	@SuppressWarnings("deprecation")

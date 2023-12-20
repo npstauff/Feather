@@ -1,4 +1,4 @@
-package nixstudio.Feather;
+package nixstudio.Feather.Core;
 
 public class Pair <T,K> {
 	public T first;
