@@ -1,6 +1,8 @@
 # Welcome
 Feather is a lightweight IDE written in Java using the JNI-based ImGui renderer by SpaiR at: https://github.com/SpaiR
 
+![image](https://github.com/nix3220/Feather/assets/80929841/4606e2c1-bd03-4ba5-ae81-61599aa10a07)
+
 Features
 --
 So far the editor supports
