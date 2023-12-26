@@ -33,7 +33,7 @@ public class GuiMain extends Application{
 	
 	Configuration config = null;
 	
-	ArrayList<Class<? extends StudioWindow>> windowTypes = new ArrayList<>();
+	ArrayList<Class<Plugin>> plugins = new ArrayList<>();
 	
 	ArrayList<Pair<Boolean, StudioWindow>> windows = new ArrayList<>();
 	
@@ -92,11 +92,11 @@ public class GuiMain extends Application{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T extends StudioWindow> void loadPlugin(File f) {
+	public void loadPlugin(File f) {
 		String className = "plugins." + FilenameUtils.getBaseName(f.getName());
 		try {
-			Class<T> klass = (Class<T>) Class.forName(className);
-			this.windowTypes.add(klass);
+			Class<Plugin> klass = (Class<Plugin>) Class.forName(className);
+			this.plugins.add(klass);
 		} catch (Exception e) {
 			error("Unable to load plugin: " + f.getName(), e);
 		}
@@ -166,10 +166,12 @@ public class GuiMain extends Application{
 				ImGui.endMenu();
 			}
 			if(ImGui.beginMenu("Window")) {
-				for(Class<? extends StudioWindow> klass : windowTypes) {
+				for(Class<Plugin> klass : plugins) {
 					if(ImGui.menuItem(klass.getName().replace("plugins.", ""))) {
 						try {
-							openWindow(klass);
+							if(klass.isAssignableFrom(StudioWindow.class)){
+								openWindow(klass.asSubclass(StudioWindow.class));
+							}
 						} catch (Exception e) {
 							error("Unable to open window '" + klass.getName() + "'", e);
 						}
