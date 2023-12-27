@@ -9,13 +9,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import imgui.ImGui;
 import imgui.extension.texteditor.*;
 import imgui.type.ImBoolean;
 import imgui.type.ImString;
+import nixstudio.Feater.Exceptions.FeatherLanguageException;
 import nixstudio.Feather.Core.Gui;
 import nixstudio.Feather.Core.GuiMain;
 import nixstudio.Feather.Core.StudioWindow;
+import nixstudio.Feather.utils.LanguageUtils;
+import nixstudio.Feather.utils.LanguageUtils.Language;
 
 import org.apache.commons.io.*;
 
@@ -59,10 +65,21 @@ public class Editor extends StudioWindow{
 		return "Editor";
 	}
 	
+	
+	public File currentFile() {
+		return currentFiles.get(selected);
+	}
 
 	@Override
 	public void guiUpdate() {
 		// TODO Auto-generated method stub
+		if(currentFiles.size() > 0 && selected != -1) {
+			Gui.sameLine();
+			Language language = LanguageUtils.language(FilenameUtils.getExtension(currentFile().getName()));
+			if(Gui.button("Run " + language + " Program")) {
+				runFile(language, currentFile());
+			}
+		}
 		String text = EDITOR.getText();
 		if(currentFiles.size() > 0) {
 			if(Gui.beginTabBar("tabs")) {
@@ -84,6 +101,15 @@ public class Editor extends StudioWindow{
 		}
 		else {
 			noFiles("No Files Selected");
+		}
+	}
+	
+	public void runFile(Language language, File f) {
+		try {
+			LanguageUtils.agent(f).compileAndRun();
+		}
+		catch (FeatherLanguageException e) {
+			JOptionPane.showMessageDialog(new JFrame(), e.getMessage());
 		}
 	}
 	

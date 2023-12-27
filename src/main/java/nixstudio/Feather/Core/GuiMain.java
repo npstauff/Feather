@@ -22,6 +22,9 @@ import plugins.Explorer;
 
 public class GuiMain extends Application{
 	
+	/**
+	 * This is the path that the engine looks through to find plugin files
+	 */
 	public static final String PLUGIN_PATH = "src/main/java/plugins";
 	public static final File basePluginFolder() {
 		return new File(PLUGIN_PATH);
@@ -33,8 +36,15 @@ public class GuiMain extends Application{
 	
 	Configuration config = null;
 	
+	/**
+	 * This holds a reference to each of the classes that the engine decompiles from the plugins folder.
+	 * This is done so that you can open windows of any plugin
+	 */
 	ArrayList<Class<? extends StudioWindow>> windowTypes = new ArrayList<>();
 	
+	/**
+	 * Holds a reference to all of the currently open windows
+	 */
 	ArrayList<Pair<Boolean, StudioWindow>> windows = new ArrayList<>();
 	
 	@Override
@@ -43,6 +53,9 @@ public class GuiMain extends Application{
 		this.config = config;
 	}
 	
+	/*
+	 * loads each plugin and opens the core windows
+	 */
 	@Override
 	protected void preRun() {
 		ImGui.getIO().setConfigFlags(ImGuiConfigFlags.DockingEnable);
@@ -50,11 +63,15 @@ public class GuiMain extends Application{
 		loadDefaultLayout();
 	}
 	
+	/*
+	 * Load the core windows
+	 */
 	public void loadDefaultLayout() {
 		try {
 			openWindow(Editor.class);
 			openWindow(Explorer.class);
 			openWindow(plugins.Console.class);
+		//What the fuck
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -76,6 +93,9 @@ public class GuiMain extends Application{
 		}
 	}
 	
+	/**
+	 * Searches through the plugin folder and loads each java file found as a plugin
+	 */
 	public void loadPlugins() {
 		File f = new File(PLUGIN_PATH);
 		if(f.exists()) {

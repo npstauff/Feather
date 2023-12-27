@@ -52,7 +52,7 @@ public class Console extends StudioWindow{
 		Gui.textWrapped(stream.toString());
 	} 
 
-	void enterCommand(String command) {
+	public static void enterCommand(String command) {
 		String[] args = command.split(" ");
 		try {
 			Process proc = new ProcessBuilder(args).start();
@@ -65,7 +65,7 @@ public class Console extends StudioWindow{
 			}
 			System.out.println();
 		} catch (IOException e) {
-			e.printStackTrace(ps);
+			e.printStackTrace(System.out);
 		}
 	}
 }
