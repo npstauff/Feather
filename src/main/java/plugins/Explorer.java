@@ -14,6 +14,7 @@ import nixstudio.Feather.Core.Gui;
 import nixstudio.Feather.Core.GuiMain;
 import nixstudio.Feather.Core.Pair;
 import nixstudio.Feather.Core.Plugin;
+import nixstudio.Feather.Core.PluginType;
 import nixstudio.Feather.Core.StudioWindow;
 
 public class Explorer extends StudioWindow implements Plugin{
@@ -21,6 +22,10 @@ public class Explorer extends StudioWindow implements Plugin{
 	public Explorer(GuiMain main) {
 		super(main);
 		// TODO Auto-generated constructor stub
+	}
+	
+	public Explorer() {
+		
 	}
 
 	public File srcPath = null;
@@ -116,6 +121,12 @@ public class Explorer extends StudioWindow implements Plugin{
 				}
 			}
 		}
+	}
+	
+	@Override
+	public PluginType type() {
+		// TODO Auto-generated method stub
+		return PluginType.Window;
 	}
 	
 }

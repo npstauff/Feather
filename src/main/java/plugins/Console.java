@@ -16,6 +16,7 @@ import imgui.type.ImString;
 import nixstudio.Feather.Core.Gui;
 import nixstudio.Feather.Core.GuiMain;
 import nixstudio.Feather.Core.Plugin;
+import nixstudio.Feather.Core.PluginType;
 import nixstudio.Feather.Core.StudioWindow;
 
 public class Console extends StudioWindow implements Plugin{
@@ -28,6 +29,10 @@ public class Console extends StudioWindow implements Plugin{
 	public Console(GuiMain main) {
 		super(main);
 		System.setOut(ps);
+	}
+	
+	public Console() {
+		
 	}
 
 	@Override
@@ -73,5 +78,11 @@ public class Console extends StudioWindow implements Plugin{
 	@Override
 	public String getName() {
 		return "Console";
+	}
+
+	@Override
+	public PluginType type() {
+		// TODO Auto-generated method stub
+		return PluginType.Window;
 	}
 }

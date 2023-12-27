@@ -10,6 +10,10 @@ public abstract class StudioWindow{
 		this.application = main;
 	}
 	
+	public StudioWindow() {
+		
+	}
+	
 	public abstract String getTitle();
 
 	public abstract void guiUpdate();

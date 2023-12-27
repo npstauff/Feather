@@ -17,6 +17,8 @@ import imgui.flag.ImGuiConfigFlags;
 import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.*;
+import nixstudio.Feather.language.Language;
+import nixstudio.Feather.language.LanguageAgent;
 import plugins.Editor;
 import plugins.Explorer;
 
@@ -100,6 +102,22 @@ public class GuiMain extends Application{
 		} catch (Exception e) {
 			error("Unable to load plugin: " + f.getName(), e);
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T extends LanguageAgent> LanguageAgent getAgent(Language l, File f) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		for(Class<Plugin> p : plugins) {
+			Constructor<Plugin> ctor = null;
+			ctor = (Constructor<Plugin>) p.getConstructor();
+			
+			Plugin obj = ctor.newInstance(new Object[] {f});
+			if(obj.type() == PluginType.Language) {
+				if(((T) obj).getId().equals(l.name)) {
+					return (LanguageAgent) obj;
+				}
+			}
+		}
+		return null;
 	}
 	
 	public <T extends StudioWindow> void openWindow(Class<T> klass) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
