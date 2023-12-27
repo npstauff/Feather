@@ -19,13 +19,14 @@ import imgui.type.ImString;
 import nixstudio.Feater.Exceptions.FeatherLanguageException;
 import nixstudio.Feather.Core.Gui;
 import nixstudio.Feather.Core.GuiMain;
+import nixstudio.Feather.Core.Plugin;
 import nixstudio.Feather.Core.StudioWindow;
 import nixstudio.Feather.utils.LanguageUtils;
 import nixstudio.Feather.utils.LanguageUtils.Language;
 
 import org.apache.commons.io.*;
 
-public class Editor extends StudioWindow{
+public class Editor extends StudioWindow implements Plugin{
 
 	public Editor(GuiMain main) {
 		super(main);
@@ -43,6 +44,10 @@ public class Editor extends StudioWindow{
 	static {
 		TextEditorLanguageDefinition lang = TextEditorLanguageDefinition.c();
 		EDITOR.setLanguageDefinition(lang);
+	}
+
+	public String getName(){
+		return "Editor";
 	}
 	
 	public void addFile(File f) {

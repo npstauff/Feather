@@ -13,9 +13,10 @@ import imgui.type.ImBoolean;
 import nixstudio.Feather.Core.Gui;
 import nixstudio.Feather.Core.GuiMain;
 import nixstudio.Feather.Core.Pair;
+import nixstudio.Feather.Core.Plugin;
 import nixstudio.Feather.Core.StudioWindow;
 
-public class Explorer extends StudioWindow{
+public class Explorer extends StudioWindow implements Plugin{
 	
 	public Explorer(GuiMain main) {
 		super(main);
@@ -29,6 +30,10 @@ public class Explorer extends StudioWindow{
 	@Override
 	public String getTitle() {
 		// TODO Auto-generated method stub
+		return "Explorer";
+	}
+
+	public String getName(){
 		return "Explorer";
 	}
 

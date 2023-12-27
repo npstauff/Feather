@@ -15,9 +15,10 @@ import imgui.ImGui;
 import imgui.type.ImString;
 import nixstudio.Feather.Core.Gui;
 import nixstudio.Feather.Core.GuiMain;
+import nixstudio.Feather.Core.Plugin;
 import nixstudio.Feather.Core.StudioWindow;
 
-public class Console extends StudioWindow{
+public class Console extends StudioWindow implements Plugin{
 
 	ByteArrayOutputStream stream = new ByteArrayOutputStream();
 	PrintStream old = System.out;
@@ -67,5 +68,10 @@ public class Console extends StudioWindow{
 		} catch (IOException e) {
 			e.printStackTrace(System.out);
 		}
+	}
+
+	@Override
+	public String getName() {
+		return "Console";
 	}
 }

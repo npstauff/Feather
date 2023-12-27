@@ -22,9 +22,6 @@ import plugins.Explorer;
 
 public class GuiMain extends Application{
 	
-	/**
-	 * This is the path that the engine looks through to find plugin files
-	 */
 	public static final String PLUGIN_PATH = "src/main/java/plugins";
 	public static final File basePluginFolder() {
 		return new File(PLUGIN_PATH);
@@ -36,15 +33,8 @@ public class GuiMain extends Application{
 	
 	Configuration config = null;
 	
-	/**
-	 * This holds a reference to each of the classes that the engine decompiles from the plugins folder.
-	 * This is done so that you can open windows of any plugin
-	 */
-	ArrayList<Class<? extends StudioWindow>> windowTypes = new ArrayList<>();
+	ArrayList<Class<Plugin>> plugins = new ArrayList<>();
 	
-	/**
-	 * Holds a reference to all of the currently open windows
-	 */
 	ArrayList<Pair<Boolean, StudioWindow>> windows = new ArrayList<>();
 	
 	@Override
@@ -53,9 +43,6 @@ public class GuiMain extends Application{
 		this.config = config;
 	}
 	
-	/*
-	 * loads each plugin and opens the core windows
-	 */
 	@Override
 	protected void preRun() {
 		ImGui.getIO().setConfigFlags(ImGuiConfigFlags.DockingEnable);
@@ -63,15 +50,11 @@ public class GuiMain extends Application{
 		loadDefaultLayout();
 	}
 	
-	/*
-	 * Load the core windows
-	 */
 	public void loadDefaultLayout() {
 		try {
 			openWindow(Editor.class);
 			openWindow(Explorer.class);
 			openWindow(plugins.Console.class);
-		//What the fuck
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -93,9 +76,6 @@ public class GuiMain extends Application{
 		}
 	}
 	
-	/**
-	 * Searches through the plugin folder and loads each java file found as a plugin
-	 */
 	public void loadPlugins() {
 		File f = new File(PLUGIN_PATH);
 		if(f.exists()) {
@@ -112,11 +92,11 @@ public class GuiMain extends Application{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T extends StudioWindow> void loadPlugin(File f) {
+	public void loadPlugin(File f) {
 		String className = "plugins." + FilenameUtils.getBaseName(f.getName());
 		try {
-			Class<T> klass = (Class<T>) Class.forName(className);
-			this.windowTypes.add(klass);
+			Class<Plugin> klass = (Class<Plugin>) Class.forName(className);
+			this.plugins.add(klass);
 		} catch (Exception e) {
 			error("Unable to load plugin: " + f.getName(), e);
 		}
@@ -186,10 +166,12 @@ public class GuiMain extends Application{
 				ImGui.endMenu();
 			}
 			if(ImGui.beginMenu("Window")) {
-				for(Class<? extends StudioWindow> klass : windowTypes) {
+				for(Class<Plugin> klass : plugins) {
 					if(ImGui.menuItem(klass.getName().replace("plugins.", ""))) {
 						try {
-							openWindow(klass);
+							if(klass.isAssignableFrom(StudioWindow.class)){
+								openWindow(klass.asSubclass(StudioWindow.class));
+							}
 						} catch (Exception e) {
 							error("Unable to open window '" + klass.getName() + "'", e);
 						}
